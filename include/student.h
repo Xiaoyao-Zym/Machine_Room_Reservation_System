@@ -1,6 +1,11 @@
 #pragma once
 #include<iostream>
 #include<identity.h>
+#include<globalFile.h>
+#include<fstream>
+#include<vector>
+#include<orderFile.h>
+#include<computerRoom.h>
 using namespace std;
 //学生类
 class Student : public Identity
@@ -14,4 +19,5 @@ public:
     void showAllOrder();       //查看所有预约
     void cancelOrder();         //取消预约
     int m_Id;                         //学生学号
+    vector<ComputerRoom>vCom;   //机房容器
 };

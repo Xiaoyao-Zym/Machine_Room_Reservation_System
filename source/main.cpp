@@ -21,25 +21,60 @@ void managerMenu(Identity * &manager)
         switch (select)
         {
         case 1:     //添加账号
-            cout<<"添加账号："<<endl;
+            // cout<<"添加账号："<<endl;
             man->addPerson();
             break;
          case 2:     //查看账号
-             cout<<"查看账号："<<endl;
+            //  cout<<"查看账号："<<endl;
              man->showPerson();
              break;
          case 3:     //查看机房
-             cout<<"查看机房："<<endl;
+            //  cout<<"查看机房："<<endl;
              man->showComputer();
              break;
          case 4:     //清空预约
-             cout<<"清空预约："<<endl;
+            //  cout<<"清空预约："<<endl;
              man->cleanFile();
              break;
         default:
+            delete manager;
             cout<<"注销成功"<<endl;
             system("pause");
+            system("cls");
+            return;
+        }
+    }
+}
+//学生子菜单界面
+void studentMenu(Identity *&student)
+{
+    while (true)
+    {
+        //学生菜单
+        student->openMenu();
+        Student* stu=(Student*)student;
+        int select=0;
+        cin>>select;
+        switch (select)
+        {
+        case 1:     //申请预约
+            stu->applyOrder();
             break;
+         case 2:     //查看自身预约
+             stu->showMyOrder();
+             break;
+         case 3:     //查看所有预约
+             stu->showAllOrder();
+             break;
+         case 4:     //清空预约
+             stu->cancelOrder();
+             break;
+        default:
+            delete student;
+            cout<<"注销成功"<<endl;
+            system("pause");
+            system("cls");
+            return;
         }
     }
 }
@@ -79,7 +114,8 @@ void LogiIn(string fileName, int type)
                 system("pause");
                 system("cls");
                 person=new Student(id, name, pwd);
-
+                //进入学生子菜单界面
+                studentMenu(person);
                 return;
             }
             else
@@ -143,6 +179,7 @@ void LogiIn(string fileName, int type)
     }
     system("pause");
     system("cls");
+    return;
 }
 int main(void)
 {

@@ -1,5 +1,6 @@
 #pragma once
 #include<iostream>
+#include<computerRoom.h>
 #include<vector>
 #include<identity.h>
 #include<student.h>
@@ -7,6 +8,7 @@
 #include<fstream>
 #include<globalFile.h>
 #include<string>
+#include<algorithm>
 using namespace std;
 class Manager : public Identity
 {
@@ -31,4 +33,8 @@ public:
    vector<Student>vStu;
    //教师容器
    vector<Teacher>vTea;
+   //重复检测函数
+   bool chectRepeat(int id, int  type);
+   //机房容器
+   vector<ComputerRoom>vCom;
 };

@@ -1,1 +1,1 @@
-{\rtf1}
+data:1 interval:1 stuId:1 stuName:zhangsan roomI:1 status:1
