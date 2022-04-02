@@ -1424,3 +1424,17 @@ void Teacher::validOrder()      //取消预约
 ## 待解决bug
 1. 程序无法读出txt文件中的中文，导致学生、教师姓名信息读取乱码，引起登录失败，并输出中文乱码
 2. 显示预约**void Student::showAllOrder()**函数输出陷入死循环，并无结果输出。
+3.出现多个问题
+>**error:** converting to execution character set: Illegal byte sequence
+**warning:** deleting object of abstract class type 'Identity' which has non-virtual destructor will cause undefined behavior [-Wdelete-non-virtual-dtor]
+             delete student;
+                    ^~~~~~~
+**warning:** deleting object of abstract class type 'Identity' which has non-virtual destructor will cause undefined behavior [-Wdelete-non-virtual-dtor]
+             delete manager;
+                    ^~~~~~~
+**warning:** comparison of integer expressions of different signedness: 'int' and 'std::vector<int>::size_type' {aka 'long long unsigned int'} [-Wsign-compare]
+         if(select>=0&&select<=v.size())
+                       ~~~~~~^~~~~~~~~~
+        
+>
+
