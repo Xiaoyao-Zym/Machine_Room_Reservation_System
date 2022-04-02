@@ -38,7 +38,7 @@ void Student:: openMenu()  //菜单界面
     cout<<"\t\t|---------------------------------------| \n";
     cout<<"输入您的选择：";
 }
- void Student:: applyOrder()           //申请预约
+void Student:: applyOrder()           //申请预约
 {
     cout<<"机房开放时间为周一至周五！"<<endl
             <<"请输入申请预约的时间"<<endl

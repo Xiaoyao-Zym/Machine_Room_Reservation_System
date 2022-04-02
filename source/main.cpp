@@ -78,6 +78,33 @@ void studentMenu(Identity *&student)
         }
     }
 }
+//教师子菜单界面
+void TeacherMenu(Identity *&teacher)
+{
+    while (true)
+    {
+        //学生菜单
+        teacher->openMenu();
+        Teacher* tea=(Teacher*)teacher;
+        int select=0;
+        cin>>select;
+        switch (select)
+        {
+         case 1:     //查看所有预约
+             tea->showAllOrder();
+             break;
+         case 4:     //审核预约
+             tea->validOrder();
+             break;
+        default:
+            delete tea;
+            cout<<"注销成功"<<endl;
+            system("pause");
+            system("cls");
+            return;
+        }
+    }
+}
 //登陆功能
 void LogiIn(string fileName, int type)
 {

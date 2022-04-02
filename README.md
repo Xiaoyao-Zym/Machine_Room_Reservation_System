@@ -1231,3 +1231,196 @@ void Student::cancelOrder()         //取消预约
     system("cls");
 }
 ```
+## 9 教师模块
+### 9.1教师登录和注销
+#### 9.1.1构造函数
+* 在Teacher类构造函数中，初始化教师信息，代码如下;
+```C++
+//有参构造（职工编号，姓名，密码）
+Teacher::Teacher(int empId, string name, string pwd) //有参构造(编号、姓名、密码)
+{
+    this->m_EmpId=empId;
+    this->m_Name=name;
+    this->m_Pwd=pwd;
+}
+```
+9.1.2 教师子菜单
+* 在机房预约系统.cpp中，当用户登录的是教师，添加教师菜单接口
+* 将不同的分支提供出来
+查看所有预约
+审核预约
+注销登录
+* 实现注销功能
+添加全局函数void TeacherMenu(Person *&manager)代码如下：
+```C++
+//教师子菜单界面
+void TeacherMenu(Identity *&teacher)
+{
+    while (true)
+    {
+        //学生菜单
+        teacher->openMenu();
+        Teacher* tea=(Teacher*)teacher;
+        int select=0;
+        cin>>select;
+        switch (select)
+        {
+         case 1:     //查看所有预约
+             tea->showAllOrder();
+             break;
+         case 4:     //审核预约
+             tea->validOrder();
+             break;
+        default:
+            delete tea;
+            cout<<"注销成功"<<endl;
+            system("pause");
+            system("cls");
+            return;
+        }
+    }
+}
+```
+####9.1.3 菜单功能实现
+* 在实现成员函数**void Teacher::operMenu()代码如下;
+```C++
+void Teacher:: openMenu()  //菜单界面
+{
+    cout<<"欢迎管理员："<<this->m_Name<<"登陆！"<<endl;
+    cout<<"\t\t|---------------------------------------|\n";
+    cout<<"\t\t|                                                        | \n";
+    cout<<"\t\t|                                                        | \n";
+    cout<<"\t\t|               1. 查看所有预约                | \n";
+    cout<<"\t\t|                                                        | \n";
+    cout<<"\t\t|               2. 审核预约                       | \n";
+    cout<<"\t\t|                                                        | \n";
+    cout<<"\t\t|               0. 注销登录                      | \n";
+    cout<<"\t\t|                                                        | \n";
+    cout<<"\t\t|                                                        | \n";
+    cout<<"\t\t|---------------------------------------| \n";
+    cout<<"输入您的选择：";
+}
+```
+###9.2 查看所有预约
+####9.2.1所有预约功能实现
+该功能与学生身份查看所有预约功能相似，用于显示所有预约记录
+在Teacher.cpp中实现成员函数void Teacher::showAllOrder()
+```C++
+void Teacher::showAllOrder()       //查看所有预约
+{
+    OrderFile of;
+    if(of.m_Size==0)
+    {
+        cout<<"无预约记录"<<endl;
+        system("pause");
+        system("cls");
+        return;
+    }
+    for (int i = 0; i < of.m_Size; i++)
+    {
+        if(atoi(of.m_orderData[i]["stuId"].c_str())==this->m_Id)
+        {
+            cout<<"预约日期：周"<<of.m_orderData[i]["data"];
+            cout<<"时段："<<(of.m_orderData[i]["interval"]=="1"?"上午":"上午");
+            cout<<" 学号："<<of.m_orderData[i]["stuId"];
+            cout<<" 姓名："<<of.m_orderData[i]["stuName"];
+            cout<<"机房："<<of.m_orderData[i]["roomId"];
+            string status=" 状态：";   //0：取消的预约  1：审核中   2：已预约   -1：预约失败
+            if (of.m_orderData[i]["status"]=="1")
+            {
+                status+="审核中";
+            }
+            else if(of.m_orderData[i]["status"]=="2")
+            {
+                status+="预约成功";
+            }
+            else if(of.m_orderData[i]["status"]=="-1")
+            {
+                status+="审核未通过，预约失败";
+            }
+            else 
+            {
+                status+="预约已取消";
+            }
+            cout<<status<<endl;
+        }
+    }
+    system("pause");
+    system("cls");
+}
+```
+###9.3审核预约
+####9.3.1审核功能实现
+功能描述：教师审核学生预约，依据实际情况审核预约
+在Teacher.cpp中实现成员函数void Teacher::validOrder()
+代码如下：
+```C++
+void Teacher::validOrder()      //取消预约
+{
+    OrderFile of;
+    if(of.m_Size==0)
+    {
+        cout<<"无预约记录"<<endl;
+        system("pause");
+        system("cls");
+        return;
+    }
+    cout<<"待审核的预约记录如下："<<endl;
+    vector<int>v;
+    int index=0;
+    for (int i =1; i <of.m_Size; i++)
+    {
+        if (of.m_orderData[i]["status"]=="1")
+        {
+            v.push_back(i);
+            cout<<++index<<"、";
+            cout<<"预约日期：周"<<of.m_orderData[i]["date"];
+            cout<<"时段："<<(of.m_orderData[i]["interval"]=="1" ? "上午": "下午");
+            cout<<"机房："<<of.m_orderData[i]["roomId"];
+            string status="状态：";    //取消的预约  1审核中  2已预约   -1预约失败
+            if (of.m_orderData[i]["status"]=="1")
+            {
+                status="审核中";
+            }
+            cout<<status<<endl;
+        }
+    }
+    cout<<"请输入审核的预约记录，0代表返回"<<endl;
+    int select=0;
+    int ret=0;
+    while (true)
+    {
+        cin>>select;
+        if(select>=0&&select<=v.size())
+        {
+            if (select==0)
+            {
+                break;
+            }
+            else
+            {
+                cout<<"请输入审核结果"<<endl;
+                cout<<"1、通过"<<endl;
+                cout<<"2、不通过"<<endl;
+                cin>>ret;
+                if(ret==1)
+                {
+                    of.m_orderData[v[select-1]]["status"]="2";
+                }
+                else
+                {
+                    of.m_orderData[v[select-1]]["status"]="-1";
+                }
+                of.updataOrder();
+                cout<<"审核完毕！"<<endl;
+            }
+        }
+        cout<<"输入有误，请重新输入"<<endl;
+    }
+    system("pause");
+    system("cls");
+}
+```
+## 待解决bug
+1. 程序无法读出txt文件中的中文，导致学生、教师姓名信息读取乱码，引起登录失败，并输出中文乱码
+2. 显示预约**void Student::showAllOrder()**函数输出陷入死循环，并无结果输出。
